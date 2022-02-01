@@ -139,7 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Test_2_Network of nodes.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="Notework_manager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,11 @@
+﻿  Node.cpp
+D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(36,32): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(37,36): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(58,53): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(59,54): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(93,49): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(94,50): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(193,32): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(194,36): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(266,18): warning C4804: %: небезопасное использование типа "bool" в операции
+  Test_2_Network of nodes.vcxproj -> D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\x64\Debug\Test_2_Network of nodes.exe
