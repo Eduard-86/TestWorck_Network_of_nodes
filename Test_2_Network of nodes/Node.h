@@ -7,6 +7,7 @@
 
 #include <ctime>
 #include <stdlib.h>
+//#include "Notework_manager.h"
 
 //using namespace std;
 
@@ -82,7 +83,9 @@ class Node
 	// ”казатель это хешь информаци€, пара значение bool - это какой тип метода мы передали
 		// int - это значени€ которое нас интересует, инфа которую мы получали с этого узла
 	map<Node*, pair<bool, int>> MySubscription;
-	 
+
+	friend class Notework_manager;
+	
 public: 
 
 	Node(Node* NodePtr, function<void(int, Node*)> Del);
@@ -95,7 +98,8 @@ public:
  
 #pragma region Events
 
-	void Event();
+	// call event on our subscribers 
+	void CallEvent();
 	
 	// method subscribe on the node
 	void SubscribeOnNode();
@@ -103,7 +107,7 @@ public:
 	// событи€ отписки от того на кого подписан
 	void UnSubscribe();
 
-	void CreateAndSubscribeNewNode();
+	Node * CreateAndSubscribeNewNode();
 
 	void Inaction();
 
@@ -164,9 +168,18 @@ private:
 	void UnSubscribeOnMe(Node*);
 
 	pair < bool, function<void(int, Node*)>> RandomEvern();
-	
+
+	bool IsAlone()
+	{
+		return MySubscription.empty() && MulticastDelegate.empty();
+	}
+
+	static int indexnode;
 }; 
 
+
+
+/*
 void Node::Test()
 {
 	//Node no(bind(&Node::EventCall, this, std::placeholders::_1));
@@ -175,4 +188,4 @@ void Node::Test()
 	//MulticastDelegate.emplace_back(&Node::Test);
 	
 	//std::bind;
-}
+}*/

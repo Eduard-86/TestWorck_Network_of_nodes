@@ -1,6 +1,7 @@
 #pragma once
 #include "Node.h"
-#include "math.h"
+
+int Node::indexnode = 0;
 
 Node::Node(Node* NodePtr, function<void(int, Node*)> Del)
 {
@@ -17,6 +18,17 @@ Node::~Node()
 	delete(&FooEnd1);
 }
 
+#pragma region Events
+
+void Node::CallEvent()
+{
+	for(int i = 0; i < MulticastDelegate.size(); ++i)
+	{
+		//MulticastDelegate[i].second(rand() % 100, MulticastDelegate[i].first);
+		MulticastDelegate[i].second(rand() % 100, this);
+	}
+}
+
 void Node::SubscribeOnNode()
 {
 	//find the node
@@ -29,13 +41,13 @@ void Node::SubscribeOnNode()
 			когда 2 ноды подписанны друг на друга ибо если одна подписанна они уже соседи 
 
 	
-		Чекаем одил ли унего лишь подписчик - подписка 
+		Чекаем один ли унего лишь подписчик - подписка 
 	 */
 
 	
 	int my = MySubscription.size();
 	int del = MulticastDelegate.size();
-	int indexsusa = rand() % my + del;
+	int indexsusa = rand() % (my + del);
 
 	Node* newsub = nullptr;
 
@@ -57,7 +69,7 @@ void Node::SubscribeOnNode()
 
 		int mysub_nei = iter->first->MySubscription.size();
 		int del_nei = iter->first->MulticastDelegate.size();
-		int indexsusa_nei = rand() % mysub_nei + del_nei;
+		int indexsusa_nei = rand() % (mysub_nei + del_nei);
 
 		if(indexsusa_nei < mysub_nei && mysub_nei != 0)
 		{
@@ -70,29 +82,27 @@ void Node::SubscribeOnNode()
 		}
 		else if(del_nei != 0)
 		{
-			int tempindex_nei = del_nei > mysub_nei ? del_nei - mysub_nei : mysub_nei - del_nei;
-			
-			int inxdel = indexsusa_nei == tempindex_nei ? tempindex_nei - 1 : tempindex_nei;
+			int inxdel = indexsusa_nei - mysub_nei;
 
 			// todo всё ли подтерается когда удолдяется динамический объект ???
 			newsub = iter->first->MulticastDelegate[inxdel].first;
 		}
 		else
 		{
+			// этот ретурнт тут на всякий
+			// и вообще воткни сюда исключение 
 			return;
 		}
 	}
 	else if(del != 0)
 	{
-		int tempindex = del > my ? del - my : my - del;
-
-		int inxdel = indexsusa == tempindex ? tempindex - 1 : tempindex;
+		int inxdel = indexsusa - my;
 
 		Node* delNode = MulticastDelegate[inxdel].first;
 
 		int mysub_nei = delNode->MySubscription.size();
 		int del_nei = delNode->MulticastDelegate.size();
-		int indexsusa_nei = rand() % mysub_nei + del_nei;
+		int indexsusa_nei = rand() % (mysub_nei + del_nei);
 
 		if(indexsusa_nei < mysub_nei && mysub_nei != 0)
 		{
@@ -105,18 +115,18 @@ void Node::SubscribeOnNode()
 		}
 		else if (del_nei != 0)
 		{
-			int tempindex_nei = del_nei > mysub_nei ? del_nei - mysub_nei : mysub_nei - del_nei;
-
-			int inxdel = indexsusa_nei == tempindex_nei ? tempindex_nei - 1 : tempindex_nei;
+			int inxdel = indexsusa_nei - mysub_nei;
 			
 			// todo всё ли подтерается когда удолдяется динамический объект ???
 			newsub = delNode->MulticastDelegate[inxdel].first;
 		}
 		else
 		{
+			// этот ретурнт тут на всякий
+			// и вообще воткни сюда исключение
 			return;
 		}
-
+		/*
 		if(MulticastDelegate[inxdel].first != this)
 		{
 			// todo дерьмо, поправь потом
@@ -146,6 +156,7 @@ void Node::SubscribeOnNode()
 
 			return;
 		}
+		*/
 	}
 
 	if (newsub != this)
@@ -156,14 +167,14 @@ void Node::SubscribeOnNode()
 		{
 			if (MulticastDelegate[i].first == newsub)
 			{
-				// todo Выдай отладочную инфу произошла ли подписка 
+				// todo Выдай отладочную инфу, данный узел уже есть в подписках
 				return;
 			}
 		}
 
 		if (MySubscription.find(newsub) != MySubscription.end())
 		{
-			// todo Выдай отладочную инфу произошла ли подписка 
+			// todo Выдай отладочную инфу, данный узел уже есть в подписках 
 			return;
 		}
 
@@ -179,45 +190,22 @@ void Node::SubscribeOnNode()
 		// todo Выдай отладочную инфу произошла ли подписка 
 		return;
 	}
-
-}
-
-void Node::Subscribe(Node* NodePtr, function<void(int, Node*)> Del)
-{
-	
-	MulticastDelegate.push_back(std::make_pair(NodePtr, Del));
+	else
+	{
+		// мы наткнулись сами на себя 
+		return;
+	}
 }
 
 void Node::UnSubscribe()
 {
-	int my = MySubscription.size();
-	int del = MulticastDelegate.size();
-	int indexsusa = rand() % my + del;
-
-
-	if (indexsusa <= my)
-	{
-		// переместить итератор на нужное число индексов
-		int indexmysub = indexsusa == my ? indexsusa - 1 : indexsusa;
-
-		map<Node*, pair<bool, int>>::iterator iter = MySubscription.begin();
-		std::advance(iter, indexmysub);
-
-
-		iter->first->UnSubscribeOnMe(this);
-
-	}
-	else
-	{
-		int inxdel = indexsusa == del ? indexsusa - my - 1 : indexsusa - my;
-
-		if (MulticastDelegate[inxdel].first != this)
-		{
-			return;
-		}
-	}
-
+	int mysub = MySubscription.size();
+	int indexunsub = rand() % mysub;
 	
+	map<Node*, pair<bool, int>>::iterator iter = MySubscription.begin();
+	std::advance(iter, indexunsub);
+
+	/* перебор дерева
 	//toDO мазафака
 	// рандомим один из подписанных объектов
 	map<Node*, pair<bool, int>>::iterator iter = MySubscription.begin();
@@ -226,29 +214,15 @@ void Node::UnSubscribe()
 	for (; iter != MySubscription.end(); ++iter)
 	{
 
-	}
+	}*/
 
 	iter->first->UnSubscribeOnMe(this);
 	
-	MySubscription.erase(iter->first);
+	//MySubscription.erase(iter->first);
+	MySubscription.erase(iter);
 }
 
-void Node::UnSubscribeOnMe(Node* node)
-{
-	vector<pair<Node*, function<void(int, Node*)>>>::iterator endit = MulticastDelegate.end();
-	
-	for(vector<pair<Node*, function<void(int, Node*)>>>::iterator itdel = MulticastDelegate.begin();
-		itdel > endit; itdel++)
-	{
-		if(itdel->first == node)
-		{
-			MulticastDelegate.erase(itdel);
-			break;
-		}
-	}
-}
-
-void Node::CreateAndSubscribeNewNode()
+Node* Node::CreateAndSubscribeNewNode()
 {
 	//bool EventKey = (bool)rand() % 2;
 
@@ -257,11 +231,42 @@ void Node::CreateAndSubscribeNewNode()
 	Node* NewNode = new Node(this, RandoFu.second);
 
 	MySubscription.emplace(NewNode, std::make_pair(RandoFu.first, 0));
+
+	return NewNode;
 	
 }
 
+void Node::Inaction()
+{
+	// Тут должно быть сообщеие об инактиве и всё, покачто
+}
 
-pair<bool,function<void(int, Node*)>> Node::RandomEvern()
+#pragma endregion
+
+void Node::Subscribe(Node* NodePtr, function<void(int, Node*)> Del)
+{
+
+	MulticastDelegate.push_back(std::make_pair(NodePtr, Del));
+}
+
+
+void Node::UnSubscribeOnMe(Node* node)
+{
+	vector<pair<Node*, function<void(int, Node*)>>>::iterator endit = MulticastDelegate.end();
+
+	for (vector<pair<Node*, function<void(int, Node*)>>>::iterator itdel = MulticastDelegate.begin();
+		itdel > endit; itdel++)
+	{
+		if (itdel->first == node)
+		{
+			MulticastDelegate.erase(itdel);
+			return;
+		}
+	}
+	// если до сюда дошли значит отписки не случилось и чтото пошло не по плану
+}
+
+pair<bool, function<void(int, Node*)>> Node::RandomEvern()
 {
 	bool EventKey = (bool)rand() % 2;
 	function<void(int, Node*)> FooEnd;
