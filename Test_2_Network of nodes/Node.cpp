@@ -45,8 +45,16 @@ void Node::SubscribeOnNode()
 	 */
 
 	
+	
 	int my = MySubscription.size();
 	int del = MulticastDelegate.size();
+
+	// осталась ли нода без связей на данный момент 
+	if (my && del)
+	{
+		return;
+	}
+	
 	int indexsusa = rand() % (my + del);
 
 	Node* newsub = nullptr;
@@ -200,6 +208,12 @@ void Node::SubscribeOnNode()
 void Node::UnSubscribe()
 {
 	int mysub = MySubscription.size();
+	if(!mysub)
+	{
+		cout << "\t\tУ ноды - " << this << " нет подписок" << endl;
+		return;
+	}
+	
 	int indexunsub = rand() % mysub;
 	
 	map<Node*, pair<bool, int>>::iterator iter = MySubscription.begin();
@@ -216,6 +230,7 @@ void Node::UnSubscribe()
 
 	}*/
 
+	// todo вроде не отписалось 
 	iter->first->UnSubscribeOnMe(this);
 	
 	//MySubscription.erase(iter->first);
@@ -255,7 +270,7 @@ void Node::UnSubscribeOnMe(Node* node)
 	vector<pair<Node*, function<void(int, Node*)>>>::iterator endit = MulticastDelegate.end();
 
 	for (vector<pair<Node*, function<void(int, Node*)>>>::iterator itdel = MulticastDelegate.begin();
-		itdel > endit; itdel++)
+		itdel != endit; itdel++)
 	{
 		if (itdel->first == node)
 		{
@@ -268,9 +283,11 @@ void Node::UnSubscribeOnMe(Node* node)
 
 pair<bool, function<void(int, Node*)>> Node::RandomEvern()
 {
-	bool EventKey = (bool)rand() % 2;
+	int EventKey = rand() % 2;
 	function<void(int, Node*)> FooEnd;
 
+	//bool val = bool(rand() % 2);
+	
 	// Вызовы 0 Сумма 1 
 	if (EventKey)
 	{

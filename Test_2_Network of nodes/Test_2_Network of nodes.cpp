@@ -24,13 +24,18 @@ public:
 
 int main()
 {
+    setlocale(LC_ALL, "ru");
 	srand(time(NULL));
 
-    Notework_manager manager(5);
-
-    manager.Tick();
+    Notework_manager manager = Notework_manager();
 
 	
+
+	for (int i = 0; i <= 5; ++i)
+	{
+        manager.Tick();
+	}
+
     /*
 	Notework_manager A();
 
