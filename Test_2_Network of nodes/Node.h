@@ -120,50 +120,9 @@ private:
 	void Subscribe(Node* NodePtr, function<void(int, Node*)>);
 
 	// события для делегата 
-	void EventSum(int value, Node* callnode)
-	{
-		// находим элемент в мапе
-		pair<bool, int> sub = MySubscription.at(callnode);
-
-		if (sub.first)
-		{
-			int valuesum = (MySubscription.at(callnode).second += value);
-
-			cout << "Отправитель - " << callnode
-				<< " получатель - " << this
-				<< " Сумма всех получанных чисел от этого отправителя - "
-				<< valuesum << endl;
-		}
-		else
-		{
-			// TODO сделай тут нормальное исключение ! 
-			cout << "Ошибка у тебя пошли по пизде подписки а именно у функции не верный ключ!" << endl;
-			cout << "Адрес ноды : " << this << " Делай с этой инфой чё хочешь)" << endl;
-
-		}
-	}
-	void EventCall(int value, Node* callnode)
-	{
-		// находим элемент в мапе
-		pair<bool, int> sub = MySubscription.at(callnode);
-
-		if (!sub.first)
-		{
-			int valuecall = (MySubscription.at(callnode).second += 1);
-
-			cout << "Отправитель - " << callnode
-				<< " получатель - " << this
-				<< " Сумма всех вызово от этого отправителя - "
-				<< valuecall << endl;
-		}
-		else
-		{
-			// TODO сделай тут нормальное исключение ! 
-			cout << "Ошибка у тебя пошли по пизде подписки а именно у функции не верный ключ!" << endl;
-			cout << "Адрес ноды : " << this << " Делай с этой инфой чё хочешь)" << endl;
-
-		}
-	}
+	void EventSum(int value, Node* callnode);
+	
+	void EventCall(int value, Node* callnode);
 	
 	void UnSubscribeOnMe(Node*);
 

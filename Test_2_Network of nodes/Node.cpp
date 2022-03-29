@@ -7,9 +7,6 @@ Node::Node(Node* NodePtr, function<void(int, Node*)> Del)
 {
 	this->Subscribe(NodePtr, Del);
 
-	//function<void(Node&, int)> Del = &Node::EventSum;
-
-	//node.Subscribe(Del);
 }
 
 Node::~Node()
@@ -24,7 +21,6 @@ void Node::CallEvent()
 {
 	for(int i = 0; i < MulticastDelegate.size(); ++i)
 	{
-		//MulticastDelegate[i].second(rand() % 100, MulticastDelegate[i].first);
 		MulticastDelegate[i].second(rand() % 100, this);
 	}
 }
@@ -43,8 +39,6 @@ void Node::SubscribeOnNode()
 	
 		Чекаем один ли унего лишь подписчик - подписка 
 	 */
-
-	
 	
 	int my = MySubscription.size();
 	int del = MulticastDelegate.size();
@@ -72,9 +66,6 @@ void Node::SubscribeOnNode()
 		int indexmysub = indexsusa == my ? indexsusa - 1 : indexsusa;
 		std::advance(iter, indexmysub);
 
-		//todo ага гений теперь найди соседа соседа уволень
-		// neighbor
-
 		int mysub_nei = iter->first->MySubscription.size();
 		int del_nei = iter->first->MulticastDelegate.size();
 		int indexsusa_nei = rand() % (mysub_nei + del_nei);
@@ -98,7 +89,7 @@ void Node::SubscribeOnNode()
 		else
 		{
 			// этот ретурнт тут на всякий
-			// и вообще воткни сюда исключение 
+			// todo и вообще воткни сюда исключение 
 			return;
 		}
 	}
@@ -131,40 +122,9 @@ void Node::SubscribeOnNode()
 		else
 		{
 			// этот ретурнт тут на всякий
-			// и вообще воткни сюда исключение
+			// todo и вообще воткни сюда исключение
 			return;
 		}
-		/*
-		if(MulticastDelegate[inxdel].first != this)
-		{
-			// todo дерьмо, поправь потом
-			// Блок поиска нет ли уже этой подписки у меня
-			bool keymyneighbor = false;
-			for (int i = 0; MulticastDelegate.size() > i; ++i)
-			{
-				if (MulticastDelegate[i].first == MulticastDelegate[inxdel].first)
-					keymyneighbor = true;
-
-			}
-			if (MySubscription.find(MulticastDelegate[inxdel].first) == MySubscription.end())
-				keymyneighbor = true;
-
-			if (keymyneighbor)
-				return;
-
-
-			// Ура подписка удолась !!!
-
-			pair<bool, function<void(int, Node*)>> RandoFu = RandomEvern();
-
-			
-			MulticastDelegate[inxdel].first->MulticastDelegate[my].first->Subscribe(this, RandoFu.second);
-
-			MySubscription.emplace(MulticastDelegate[inxdel].first->MulticastDelegate[my].first, std::make_pair(RandoFu.first, 0));
-
-			return;
-		}
-		*/
 	}
 
 	if (newsub != this)
@@ -175,14 +135,14 @@ void Node::SubscribeOnNode()
 		{
 			if (MulticastDelegate[i].first == newsub)
 			{
-				// todo Выдай отладочную инфу, данный узел уже есть в подписках
+				std::cout << "\t\tПодписка не произошла, была получена нода которая уже в подписках" << std::endl;
 				return;
 			}
 		}
 
 		if (MySubscription.find(newsub) != MySubscription.end())
 		{
-			// todo Выдай отладочную инфу, данный узел уже есть в подписках 
+			std::cout << "\t\tПодписка не произошла, была получена нода которая уже в подписках" << std::endl;
 			return;
 		}
 
@@ -195,12 +155,13 @@ void Node::SubscribeOnNode()
 
 		MySubscription.emplace(newsub, std::make_pair(RandoFu.first, 0));
 
-		// todo Выдай отладочную инфу произошла ли подписка 
+		std::cout << "\t\tПодписка успешна, адрес ноду на которую произошла подписка - " << newsub << std::endl;
+		
 		return;
 	}
 	else
 	{
-		// мы наткнулись сами на себя 
+		std::cout << "\t\tПодписка не произошла, при попытке подписаться нода получила ссылку на себя" << std::endl;
 		return;
 	}
 }
@@ -219,18 +180,6 @@ void Node::UnSubscribe()
 	map<Node*, pair<bool, int>>::iterator iter = MySubscription.begin();
 	std::advance(iter, indexunsub);
 
-	/* перебор дерева
-	//toDO мазафака
-	// рандомим один из подписанных объектов
-	map<Node*, pair<bool, int>>::iterator iter = MySubscription.begin();
-	
-	// хех перебор дерева, ммм говно 
-	for (; iter != MySubscription.end(); ++iter)
-	{
-
-	}*/
-
-	// todo вроде не отписалось 
 	iter->first->UnSubscribeOnMe(this);
 	
 	//MySubscription.erase(iter->first);
@@ -239,8 +188,6 @@ void Node::UnSubscribe()
 
 Node* Node::CreateAndSubscribeNewNode()
 {
-	//bool EventKey = (bool)rand() % 2;
-
 	pair<bool, function<void(int, Node*)>> RandoFu = RandomEvern();
 
 	Node* NewNode = new Node(this, RandoFu.second);
@@ -265,6 +212,54 @@ void Node::Subscribe(Node* NodePtr, function<void(int, Node*)> Del)
 }
 
 
+void Node::EventSum(int value, Node* callnode)
+{
+	// находим элемент в мапе
+	pair<bool, int> sub = MySubscription.at(callnode);
+
+	if (sub.first)
+	{
+		int valuesum = (MySubscription.at(callnode).second += value);
+
+		cout << "Отправитель - " << callnode
+			<< " получатель - " << this
+			<< " Сумма всех получанных чисел от этого отправителя - "
+			<< valuesum << endl;
+	}
+	else
+	{
+		// TODO сделай тут нормальное исключение ! 
+		cout << "Ошибка у тебя пошли по пизде подписки а именно у функции не верный ключ!" << endl;
+		cout << "Адрес ноды : " << this << " Делай с этой инфой чё хочешь)" << endl;
+
+	}
+}
+
+
+void Node::EventCall(int value, Node* callnode)
+{
+	// находим элемент в мапе
+	pair<bool, int> sub = MySubscription.at(callnode);
+
+	if (!sub.first)
+	{
+		int valuecall = (MySubscription.at(callnode).second += 1);
+
+		cout << "Отправитель - " << callnode
+			<< " получатель - " << this
+			<< " Сумма всех вызово от этого отправителя - "
+			<< valuecall << endl;
+	}
+	else
+	{
+		// TODO сделай тут нормальное исключение ! 
+		cout << "Ошибка у тебя пошли по пизде подписки а именно у функции не верный ключ!" << endl;
+		cout << "Адрес ноды : " << this << " Делай с этой инфой чё хочешь)" << endl;
+
+	}
+}
+
+
 void Node::UnSubscribeOnMe(Node* node)
 {
 	vector<pair<Node*, function<void(int, Node*)>>>::iterator endit = MulticastDelegate.end();
@@ -279,14 +274,13 @@ void Node::UnSubscribeOnMe(Node* node)
 		}
 	}
 	// если до сюда дошли значит отписки не случилось и чтото пошло не по плану
+	// todo можно въебать исключение 
 }
 
 pair<bool, function<void(int, Node*)>> Node::RandomEvern()
 {
 	int EventKey = rand() % 2;
 	function<void(int, Node*)> FooEnd;
-
-	//bool val = bool(rand() % 2);
 	
 	// Вызовы 0 Сумма 1 
 	if (EventKey)
