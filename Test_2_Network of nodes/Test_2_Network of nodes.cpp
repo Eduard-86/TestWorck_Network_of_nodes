@@ -24,7 +24,7 @@ public:
 
 int main()
 {
-    setlocale(LC_ALL, "ru");
+    //setlocale(LC_ALL, "ru");
 	srand(time(NULL));
 
     Notework_manager manager = Notework_manager();

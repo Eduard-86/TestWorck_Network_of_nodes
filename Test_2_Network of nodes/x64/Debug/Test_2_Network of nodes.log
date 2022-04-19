@@ -1,13 +1,4 @@
-﻿  Node.cpp
-D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(48,32): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(49,36): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(77,53): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(78,54): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(110,49): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(111,50): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Node.cpp(209,35): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-  Test_2_Network of nodes.cpp
-D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Notework_manager.h(134,1): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\Test_2_Network of nodes\Test_2_Network of nodes.cpp(28,12): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
-  Создание кода...
-  Test_2_Network of nodes.vcxproj -> D:\Projects\Test_2_Network of nodes\TestWorck_Network_of_nodes\x64\Debug\Test_2_Network of nodes.exe
+﻿  Test_2_Network of nodes.cpp
+D:\Projects\TestWorck_Network_of_nodes\Test_2_Network of nodes\Notework_manager.h(134,1): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Projects\TestWorck_Network_of_nodes\Test_2_Network of nodes\Test_2_Network of nodes.cpp(28,12): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  Test_2_Network of nodes.vcxproj -> D:\Projects\TestWorck_Network_of_nodes\x64\Debug\Test_2_Network of nodes.exe
