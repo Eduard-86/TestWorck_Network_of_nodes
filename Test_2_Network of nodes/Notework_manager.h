@@ -3,6 +3,7 @@
 #include "vector"
 
 using std::vector;
+using std::exception;
 
 class Notework_manager
 {
@@ -25,24 +26,26 @@ private:
 	int start_size;
 
 public:
-
-	Notework_manager()
+	
+	Notework_manager() {};
+	
+	void StartSimulator()
 	{
 		std::cout << "=== Конструктор менаджера сети ===" << std::endl;
 		std::cout << "* Введите начальное число нод" << std::endl;
 
 		std::cin >> start_size;
 
-		if(start_size <= 1)
+		if (start_size <= 1)
 		{
 			std::cout << "Число нод должно превышать 1 !" << std::endl;
 			exit(0);
 		}
-		
+
 		std::cout << "* Распределите 100 проценты между пятью ивентами" << std::endl;
 		std::cout << "  важно чтобы сумма распределённых процентов была равна 100" << std::endl;
 
-		std::cout << "\t * Вызов Ивента - " ;
+		std::cout << "\t * Вызов Ивента - ";
 		std::cin >> callEvet;
 
 		//std::cout << std::endl;
@@ -62,10 +65,12 @@ public:
 		std::cin >> inaction;
 
 		std::cout << std::endl;
-		
-		if(100 != callEvet + subscribeOnNode + unSubscribe + creatandSub + inaction)
+
+		if (100 != callEvet + subscribeOnNode + unSubscribe + creatandSub + inaction)
 		{
-			std::cout << "Ты НЕ справился не молодца" << std::endl;
+			throw exception("Ты НЕ справился не молодца\n");
+
+			//std::cout << "Ты НЕ справился не молодца" << std::endl;
 			exit(0);
 		}
 		else
@@ -73,7 +78,7 @@ public:
 			std::cout << "Ты справился МОЛОДЦА!" << std::endl;
 		}
 
-		
+
 		Node* temptr = new Node();
 
 		NodeArr.push_back(temptr);
@@ -86,17 +91,16 @@ public:
 			NodeArr.push_back(temp);
 
 			// Блок подписки предыдущего элемента на нынешний
- 
+
 			pair<bool, function<void(int, Node*)>> RandoFu = NodeArr[i - 1]->RandomEvern();
 
 			temp->Subscribe(NodeArr[i - 1], RandoFu.second);
 
 			NodeArr[i - 1]->MySubscription.emplace(temp, std::make_pair(RandoFu.first, 0));
 		}
-
 	}
 
-	Notework_manager(int size_val)
+	void StartSimulator(int size_val)
 	{
 		Node* temptr = new Node();
 
@@ -118,6 +122,7 @@ public:
 			NodeArr[i - 1]->MySubscription.emplace(temp, std::make_pair(RandoFu.first, 0));
 		}
 	}
+
 	
 	void Tick()
 	{
@@ -183,8 +188,7 @@ public:
 				}
 				default :
 				{
-					cout << "Ты что дурак блять ?" << endl <<
-						"Как так вышло что в менаджере индекс эвента привысил 4 ???\n";
+					throw exception("Ты что дурак блять ?\nКак так вышло что в менаджере индекс эвента привысил 4 ???");
 					return;
 					break;
 				}

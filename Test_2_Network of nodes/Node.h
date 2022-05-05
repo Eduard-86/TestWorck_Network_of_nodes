@@ -43,14 +43,6 @@
  
  */
 
-/*
-	30.11
-	todo сделай мазафаку и подставь куда надо
-		выборка одного из методов
-		выборка одного из объектов 
-  
- */
-
 
 using std::vector; 
 using std::map; 
@@ -93,8 +85,6 @@ public:
 	Node() {};
 
 	~Node();
-	
- 	void Test();
  
 #pragma region Events
 
@@ -135,16 +125,3 @@ private:
 
 	static int indexnode;
 }; 
-
-
-
-/*
-void Node::Test()
-{
-	//Node no(bind(&Node::EventCall, this, std::placeholders::_1));
-	
-	//MulticastDelegate.emplace_back(&Node::EventCall);
-	//MulticastDelegate.emplace_back(&Node::Test);
-	
-	//std::bind;
-}*/
