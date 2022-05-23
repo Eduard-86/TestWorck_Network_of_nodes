@@ -9,11 +9,6 @@ Node::Node(Node* NodePtr, function<void(int, Node*)> Del)
 
 }
 
-Node::~Node()
-{
-	delete(&MySubscription);
-	delete(&FooEnd1);
-}
 
 #pragma region Events
 
@@ -29,22 +24,19 @@ void Node::SubscribeOnNode()
 {
 	//find the node
 	/*
-		Блок кода отвечающий за поиск ноды 
-		сперва возмём рандомного соседа, после возмём рандомного соседа соседа
-			и подпишимся
+		Блок кода отвечающий за поиск ноды
+			сперва возьмём рандомного соседа, после возьмём рандомного соседа соседа
+			и подпишемся
 
 		Подписать мы можем только на соседа соседа, поэтому не может возникнуть ситуации
-			когда 2 ноды подписанны друг на друга ибо если одна подписанна они уже соседи 
-
-	
-		Чекаем один ли унего лишь подписчик - подписка 
+			когда 2 ноды подписаны друг на друга ибо если одна подписана они уже соседи
 	 */
 	
 	int my = MySubscription.size();
 	int del = MulticastDelegate.size();
 
 	// осталась ли нода без связей на данный момент 
-	if (my && del)
+	if (!(my && del))
 	{
 		return;
 	}
@@ -115,8 +107,7 @@ void Node::SubscribeOnNode()
 		else if (del_nei != 0)
 		{
 			int inxdel = indexsusa_nei - mysub_nei;
-			
-			// todo всё ли подтерается когда удолдяется динамический объект ???
+		
 			newsub = delNode->MulticastDelegate[inxdel].first;
 		}
 		else
@@ -135,14 +126,14 @@ void Node::SubscribeOnNode()
 		{
 			if (MulticastDelegate[i].first == newsub)
 			{
-				std::cout << "\t\tПодписка не произошла, была получена нода которая уже в подписках" << std::endl;
+				std::cout << "\t\tThe subscription did not appear, a node was received that is already in the subscriptions" << std::endl;
 				return;
 			}
 		}
 
 		if (MySubscription.find(newsub) != MySubscription.end())
 		{
-			std::cout << "\t\tПодписка не произошла, была получена нода которая уже в подписках" << std::endl;
+			std::cout << "\t\tThe subscription did not appear, a node was received that is already in the subscriptions" << std::endl;
 			return;
 		}
 
@@ -155,13 +146,13 @@ void Node::SubscribeOnNode()
 
 		MySubscription.emplace(newsub, std::make_pair(RandoFu.first, 0));
 
-		std::cout << "\t\tПодписка успешна, адрес ноду на которую произошла подписка - " << newsub << std::endl;
+		std::cout << "\t\tThe subscription is complete, node address - " << newsub << std::endl;
 		
 		return;
 	}
 	else
 	{
-		std::cout << "\t\tПодписка не произошла, при попытке подписаться нода получила ссылку на себя" << std::endl;
+		std::cout << "\t\tThe subscription did not appear, was a link to yourself" << std::endl;
 		return;
 	}
 }
@@ -171,7 +162,7 @@ void Node::UnSubscribe()
 	int mysub = MySubscription.size();
 	if(!mysub)
 	{
-		cout << "\t\tУ ноды - " << this << " нет подписок" << endl;
+		cout << "\t\tNode - " << this << " dont have subscribers" << endl;
 		return;
 	}
 	
@@ -182,7 +173,6 @@ void Node::UnSubscribe()
 
 	iter->first->UnSubscribeOnMe(this);
 	
-	//MySubscription.erase(iter->first);
 	MySubscription.erase(iter);
 }
 
@@ -211,6 +201,10 @@ void Node::Subscribe(Node* NodePtr, function<void(int, Node*)> Del)
 	MulticastDelegate.push_back(std::make_pair(NodePtr, Del));
 }
 
+// Sender Receiver
+// Отправитель получатель
+// sum all variebles on this Sender
+// sum all calls on this sender
 
 void Node::EventSum(int value, Node* callnode)
 {
@@ -221,15 +215,15 @@ void Node::EventSum(int value, Node* callnode)
 	{
 		int valuesum = (MySubscription.at(callnode).second += value);
 
-		cout << "Отправитель - " << callnode
-			<< " получатель - " << this
-			<< " Сумма всех получанных чисел от этого отправителя - "
+		cout << "Sender - " << callnode
+			<< " Receiver - " << this
+			<< " Sum all variables on this sender - "
 			<< valuesum << endl;
 	}
 	else
 	{
 		// TODO сделай тут нормальное исключение ! 
-		cout << "Ошибка у тебя пошли по пизде подписки а именно у функции не верный ключ!" << endl;
+		cout << "Ошибка у тебя пошли криво подписки а именно у функции не верный ключ!" << endl;
 		cout << "Адрес ноды : " << this << " Делай с этой инфой чё хочешь)" << endl;
 
 	}
@@ -245,15 +239,15 @@ void Node::EventCall(int value, Node* callnode)
 	{
 		int valuecall = (MySubscription.at(callnode).second += 1);
 
-		cout << "Отправитель - " << callnode
-			<< " получатель - " << this
-			<< " Сумма всех вызово от этого отправителя - "
+		cout << "Sender - " << callnode
+			<< " Receiver - " << this
+			<< " Sum all calls on this sender - "
 			<< valuecall << endl;
 	}
 	else
 	{
 		// TODO сделай тут нормальное исключение ! 
-		cout << "Ошибка у тебя пошли по пизде подписки а именно у функции не верный ключ!" << endl;
+		cout << "Ошибка у тебя пошли криво подписки а именно у функции не верный ключ!" << endl;
 		cout << "Адрес ноды : " << this << " Делай с этой инфой чё хочешь)" << endl;
 
 	}
@@ -274,7 +268,7 @@ void Node::UnSubscribeOnMe(Node* node)
 		}
 	}
 	// если до сюда дошли значит отписки не случилось и чтото пошло не по плану
-	// todo можно въебать исключение 
+	// todo можно выбросить исключение 
 }
 
 pair<bool, function<void(int, Node*)>> Node::RandomEvern()

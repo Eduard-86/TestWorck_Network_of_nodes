@@ -133,20 +133,21 @@ public:
 
 			в конце массив свеже созданных элементов переместим в основной
 		 */
-
-		std::cout << "--Поиск елементов без подписки--" << std::endl;
+		
+		std::cout << "\n--Finding elements don't have sub--" << std::endl;
 		
 		for (int i = NodeArr.size() - 1; i > -1; --i)
 		{
 			if(NodeArr[i]->IsAlone())
 			{
-				std::cout << "\tНайден и убит елемент без подписки - " << NodeArr[i] << std::endl;
+				
+				std::cout << "\tFound and killed element dont had sub - " << NodeArr[i] << std::endl;
 				NodeArr.erase(NodeArr.begin() + i);
 			}
 		}
 
-
-		std::cout << "--Этап вызова эвентов--" << std::endl;
+		// Stage - этап
+		std::cout << "--Stage calling events--" << std::endl;
 		
 		for (int i = 0; i < NodeArr.size(); ++i)
 		{
@@ -158,39 +159,38 @@ public:
 			{
 				case 0:
 				{
-					std::cout << "\tНода - " << NodeArr[i] << " отрабатывает подписки" << std::endl;
+					std::cout << "\tNode - " << NodeArr[i] << " Call all events" << std::endl;
 					NodeArr[i]->CallEvent();
 					break;
 				}
 				case 1:
 				{
-					std::cout << "\tНода - " << NodeArr[i] << " подписывается на рандомную ноду" << std::endl;
+					std::cout << "\tNode - " << NodeArr[i] << " Subscribe on random node" << std::endl;
 					NodeArr[i]->SubscribeOnNode();
 					break;
 				}
 				case 2:
 				{
-					std::cout << "\tНода - " << NodeArr[i] << " отписывается от своей подписки" << std::endl;
+					std::cout << "\tNode - " << NodeArr[i] << " Un subscribe on node" << std::endl;
 					NodeArr[i]->UnSubscribe();
 					break;
 				}
 				case 3:
 				{
-					std::cout << "\tНода - " << NodeArr[i] << " создаёт и подписывается на ноду" << std::endl;
+					std::cout << "\tNode - " << NodeArr[i] << " Create and subscribe on new node" << std::endl;
 					NewNodeArr.push_back(NodeArr[i]->CreateAndSubscribeNewNode());
 					break;
 				}
 				case 4:
 				{
-					std::cout << "\tНода - " << NodeArr[i] << " пропускает итерацию" << std::endl;
+					std::cout << "\tNode - " << NodeArr[i] << " Inaction this stage" << std::endl;
 					NodeArr[i]->Inaction();
 					break;
 				}
 				default :
 				{
-					throw exception("Ты что дурак блять ?\nКак так вышло что в менаджере индекс эвента привысил 4 ???");
+					throw exception("Ты что дурак ?\nКак так вышло что в менаджере индекс эвента привысил 4 ???");
 					return;
-					break;
 				}
 			}
 		}
