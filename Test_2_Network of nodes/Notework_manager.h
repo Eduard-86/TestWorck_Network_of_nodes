@@ -31,51 +31,50 @@ public:
 	
 	void StartSimulator()
 	{
-		std::cout << "=== Конструктор менаджера сети ===" << std::endl;
-		std::cout << "* Введите начальное число нод" << std::endl;
+		std::cout << "=== Construction managet notework ===" << std::endl;
+		std::cout << "* Enter started number of nodes" << std::endl;
 
 		std::cin >> start_size;
 
 		if (start_size <= 1)
 		{
-			std::cout << "Число нод должно превышать 1 !" << std::endl;
+			std::cout << "Number of nodes must be greater 1 !" << std::endl;
 			exit(0);
 		}
+		// Distribute - распределить, between - между 
+		std::cout << "* Distribute 100 percent between five events" << std::endl;
+		std::cout << "  it is important that the sum of the distributed interest is equal to 100" << std::endl;
 
-		std::cout << "* Распределите 100 проценты между пятью ивентами" << std::endl;
-		std::cout << "  важно чтобы сумма распределённых процентов была равна 100" << std::endl;
-
-		std::cout << "\t * Вызов Ивента - ";
+		std::cout << "\t * Call Event - ";
 		std::cin >> callEvet;
 
 		//std::cout << std::endl;
-		std::cout << "\t * Подписка на ноду - ";
+		std::cout << "\t * Subscription on node - ";
 		std::cin >> subscribeOnNode;
 
 		//std::cout << std::endl;
-		std::cout << "\t * Отписка от ноды - ";
+		std::cout << "\t * Un subscription on node - ";
 		std::cin >> unSubscribe;
 
 		//std::cout << std::endl;
-		std::cout << "\t * Создание и подписка на ноду - ";
+		std::cout << "\t * Create and subscription in node - ";
 		std::cin >> creatandSub;
 
 		//std::cout << std::endl;
-		std::cout << "\t * Пропуск действия на итерации - ";
+		std::cout << "\t * Skip stage - ";
 		std::cin >> inaction;
 
 		std::cout << std::endl;
 
-		if (100 != callEvet + subscribeOnNode + unSubscribe + creatandSub + inaction)
+		if (100 == callEvet + subscribeOnNode + unSubscribe + creatandSub + inaction)
 		{
-			throw exception("Ты НЕ справился не молодца\n");
-
-			//std::cout << "Ты НЕ справился не молодца" << std::endl;
-			exit(0);
+			std::cout << "Great, you coped\n" << std::endl;
 		}
 		else
 		{
-			std::cout << "Ты справился МОЛОДЦА!" << std::endl;
+			std::cout << "Bad, you dont coped" << std::endl;
+			//throw exception("Bad, you dont coped");
+			exit(0);
 		}
 
 

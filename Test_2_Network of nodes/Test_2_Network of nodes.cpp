@@ -12,7 +12,7 @@ int main()
 	
 	Notework_manager manager;
 
-    manager.StartSimulator(5);
+    manager.StartSimulator();
 
 
 	for (int i = 0; i <= 5; ++i)
