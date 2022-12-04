@@ -19,11 +19,22 @@ class Notework_manager
 private:
 
 	std::vector<Node*> NodeArr;
-	std::vector<Node*> NewNodeArr;
+	//std::vector<Node*> NewNodeArr;
 
 	int callEvet, subscribeOnNode, unSubscribe, creatandSub, inaction;
 
 	int start_size;
+
+	/** 
+	* @brief Атомарность !
+	* Создадим массив эвентов который будет хаполнятся на этапе тика вызова ивентов
+	* После перед пездание новых узлов прогонем все ивенты из массива
+	*/
+
+	vector<function<void()>> AtomicityArray;
+	
+	//Этот массив заменяет массив созданных в данной итерации нод  
+	vector<function<Node*()>> AtomicityArrayNewNodes;
 
 public:
 	
@@ -145,12 +156,12 @@ public:
 			}
 		}
 
-		// Stage - этап
+		
 		std::cout << "--Stage calling events--" << std::endl;
 		
 		for (int i = 0; i < NodeArr.size(); ++i)
 		{
-			// сделай метод чтоб рандомно выбрать евент
+			// TODO сделай метод чтоб рандомно выбрать евент
 
 			int RandIndex = rand() % 5;
 
@@ -159,31 +170,46 @@ public:
 				case 0:
 				{
 					std::cout << "\tNode - " << NodeArr[i] << " Call all events" << std::endl;
-					NodeArr[i]->CallEvent();
+					//NodeArr[i]->CallEvent();
+
+					AtomicityArray.emplace_back(bind(&Node::CallEvent, NodeArr[i]));
+						
 					break;
 				}
 				case 1:
 				{
 					std::cout << "\tNode - " << NodeArr[i] << " Subscribe on random node" << std::endl;
-					NodeArr[i]->SubscribeOnNode();
+					//NodeArr[i]->SubscribeOnNode();
+
+					AtomicityArray.emplace_back(bind(&Node::SubscribeOnNode, NodeArr[i]));
+						
 					break;
 				}
 				case 2:
 				{
 					std::cout << "\tNode - " << NodeArr[i] << " Un subscribe on node" << std::endl;
-					NodeArr[i]->UnSubscribe();
+					//NodeArr[i]->UnSubscribe();
+
+					AtomicityArray.emplace_back(bind(&Node::UnSubscribe, NodeArr[i]));
+
 					break;
 				}
 				case 3:
 				{
 					std::cout << "\tNode - " << NodeArr[i] << " Create and subscribe on new node" << std::endl;
-					NewNodeArr.push_back(NodeArr[i]->CreateAndSubscribeNewNode());
+					//NewNodeArr.push_back(NodeArr[i]->CreateAndSubscribeNewNode());
+
+					AtomicityArrayNewNodes.emplace_back(bind(&Node::CreateAndSubscribeNewNode, NodeArr[i]));
+
 					break;
 				}
 				case 4:
 				{
 					std::cout << "\tNode - " << NodeArr[i] << " Inaction this stage" << std::endl;
-					NodeArr[i]->Inaction();
+					//NodeArr[i]->Inaction();
+						
+					AtomicityArray.emplace_back(bind(&Node::Inaction, NodeArr[i]));
+
 					break;
 				}
 				default :
@@ -194,10 +220,29 @@ public:
 			}
 		}
 
+		// Проводим все ивенты атомарно 
+		for (int i = 0; i < AtomicityArray.size(); ++i)
+		{
+			AtomicityArray[i]();
+		}
+		AtomicityArray.clear();
+
+		// Добавляем все мозданные в этой итерации ноды в основной массив
+		for (int i = 0; i < AtomicityArrayNewNodes.size(); ++i)
+		{
+			NodeArr.push_back(AtomicityArrayNewNodes[i]());
+		}
+		AtomicityArrayNewNodes.clear();
+
+		/*
+		// Добавляем все мозданные в этой итерации ноды в основной массив
 		for (int i = 0; i < NewNodeArr.size(); ++i)
 		{
 			NodeArr.push_back(NewNodeArr[i]);
 		}
 		NewNodeArr.clear();
+		*/
 	}
+
+	
 };
